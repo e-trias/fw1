@@ -11,3 +11,4 @@ settings.xml
 *.idea
 run-tests.sh
 framework/zero.cfc
+.DS_Store
