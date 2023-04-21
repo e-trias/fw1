@@ -565,7 +565,8 @@ component {
 
                 if ( variables.config.omitDirectoryAliases ) {
                     if ( structKeyExists( variables.beanInfo, beanName ) ) {
-                        throw '#beanName# is not unique';
+                        // throw '#beanName# is not unique';
+                        systemOutput('#beanName# is not unique', true, true);
                     }
                     variables.beanInfo[ beanName ] = metadata;
                 } else {
@@ -577,7 +578,8 @@ component {
                         variables.beanInfo[ beanName ] = metadata;
                     }
                     if ( structKeyExists( variables.beanInfo, beanName & singleDir ) ) {
-                        throw '#beanName & singleDir# is not unique';
+                        // throw '#beanName & singleDir# is not unique';
+                        systemOutput('#beanName & singleDir# is not unique', true, true);
                     }
                     variables.beanInfo[ beanName & singleDir ] = metadata;
                 }
