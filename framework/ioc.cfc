@@ -535,7 +535,6 @@ component {
         } catch ( any e ) {
             // assume bad path - ignore it, cfcs is empty list
         }
-        local.beansWithDuplicates = "";
         for ( var cfcOSPath in cfcs ) {
             var cfcPath = replace( cfcOSPath, chr(92), '/', 'all' );
             // watch out for excluded paths:
@@ -568,7 +567,8 @@ component {
                         // throw '#beanName# is not unique';
                         systemOutput('#beanName# is not unique', true, true);
                     }
-                    variables.beanInfo[ beanName ] = metadata;
+                    structDelete( variables.beanInfo, beanName );
+                    variables.beanInfo[ beanName & singleDir ] = metadata;
                 } else {
                     if ( listFindNoCase(local.beansWithDuplicates, beanName) ) {}
                     else if ( structKeyExists( variables.beanInfo, beanName ) ) {
@@ -581,9 +581,7 @@ component {
                         // throw '#beanName & singleDir# is not unique';
                         systemOutput('#beanName & singleDir# is not unique', true, true);
                     }
-                    variables.beanInfo[ beanName & singleDir ] = metadata;
                 }
-
             } catch ( any e ) {
                 // wrap the exception so we can add bean name for debugging
                 // this trades off any stack trace information for the bean name but
