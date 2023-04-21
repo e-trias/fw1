@@ -561,16 +561,25 @@ component {
                 if ( structKeyExists( metadata.metadata, "type" ) && metadata.metadata.type == "interface" ) {
                     continue;
                 }
-                if ( structKeyExists( variables.beanInfo, beanName ) ) {
-                    if ( variables.config.omitDirectoryAliases ) {
-                        throw '#beanName# is not unique (and omitDirectoryAliases is true)';
+
+                if ( variables.config.omitDirectoryAliases ) {
+                    if ( structKeyExists( variables.beanInfo, beanName ) ) {
+                        // throw '#beanName# is not unique';
+                        systemOutput('#beanName# is not unique', true, true);
                     }
                     structDelete( variables.beanInfo, beanName );
                     variables.beanInfo[ beanName & singleDir ] = metadata;
                 } else {
-                    variables.beanInfo[ beanName ] = metadata;
-                    if ( !variables.config.omitDirectoryAliases ) {
-                        variables.beanInfo[ beanName & singleDir ] = metadata;
+                    if ( listFindNoCase(local.beansWithDuplicates, beanName) ) {}
+                    else if ( structKeyExists( variables.beanInfo, beanName ) ) {
+                        structDelete( variables.beanInfo, beanName );
+                        local.beansWithDuplicates = listAppend(local.beansWithDuplicates, beanName);
+                    } else {
+                        variables.beanInfo[ beanName ] = metadata;
+                    }
+                    if ( structKeyExists( variables.beanInfo, beanName & singleDir ) ) {
+                        // throw '#beanName & singleDir# is not unique';
+                        systemOutput('#beanName & singleDir# is not unique', true, true);
                     }
                 }
             } catch ( any e ) {
